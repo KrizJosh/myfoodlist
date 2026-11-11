@@ -1,96 +1,1546 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script defer src="/_vercel/insights/script.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css"
-    />
-    <title>Vercel HTML Starter</title>
-    <meta
-      name="description"
-      content="High-performance HTML based website template."
-    />
-  </head>
-  <body>
-    <h1>Vercel HTML Starter</h1>
-    <p>
-      This template is a simple, but powerful single
-      <code>index.html</code> file deployed to
-      <a href="https://vercel.com">Vercel</a>. When your site is deployed, all
-      static assets (like HTML, JavaScript, CSS, images, and more) are deployed
-      globally to every
-      <a href="https://vercel.com/docs/concepts/edge-network/overview"
-        >Vercel Edge Network</a
-      >
-      region.
-    </p>
-    <h2>Simple, privacy-friendly analytics</h2>
-    <p>
-      Want to understand your visitor traffic? Vercel Analytics gives you
-      first-party, privacy-friendly traffic analytics for your HTML site. This
-      template is already configured using the following script:
-    </p>
-    <pre><code>&lt;script defer src="/_vercel/insights/script.js"&gt;&lt;/script&gt;</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/analytics">Vercel Analytics</a>.
-    </p>
-    <h2>Integrated with git</h2>
-    <p>
-      Deploying updates to your site is as simple as
-      <code>git push</code> thanks to Vercel's advanced
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-      Support for GitHub, GitLab, Bitbucket is zero-configuration, and with the
-      flexible Vercel CLI and API, you can integrate with any tool possible.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-    </p>
-    <h2>Fast <code>gzip</code> compression</h2>
-    <p>
-      To help ensure the smallest possible file sizes for your static assets,
-      the Vercel Edge Network compresses files by default using
-      <code>gzip</code>. You can also optionally use
-      <code>brotli</code> compressesion if you prefer.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/edge-network/compression"
-        >compression</a
-      >.
-    </p>
-    <h2>Advanced routing configuration</h2>
-    <p>
-      Vercel gives you a variety of ways to configure the routing of your
-      website. For example, adding redirects, rewrites, or headers to your page.
-      While you can use <code>vercel.json</code> to define these through JSON,
-      you can also express your routing configuration as code using
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-    <p>
-      Middleware runs before the
-      <a href="https://vercel.com/docs/concepts/edge-network/caching"
-        >Vercel Edge Network Cache</a
-      >, so you can configure routing exactly as your application needs. For
-      example, this template uses <code>middleware.js</code> defined in the root
-      of the repository to add additional security headers to the site:
-    </p>
-    <pre><code>referrer-policy: origin-when-cross-origin
-strict-transport-security: max-age=31536000; includeSubDomains; preload
-x-content-type-options: nosniff
-x-dns-prefetch-control: on
-x-frame-options: DENY</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-  </body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>MINI BOSS CARWASH - Sales Manager</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <span class="login-icon">🧼</span>
+                <h2>MINI BOSS CARWASH</h2>
+                <p>Sign in to manage your carwash business</p>
+            </div>
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+                <div class="role-badge">
+                    <strong>Demo Accounts:</strong>
+                    <span>Admin: admin / password123</span>
+                    <span>Manager: manager / password123</span>
+                    <span>Staff: staff / password123</span>
+                </div>
+                <div id="loginError" class="error"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="mainApp" style="display:none;">
+        <!-- SIDEBAR -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <span class="brand-icon">🧼</span>
+                <span class="brand-text">MINI<span>BOSS</span></span>
+                <button class="sidebar-close" onclick="toggleSidebar()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard" onclick="switchPage('dashboard');return false;">
+                    <i class="fas fa-chart-pie"></i><span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="transactions" onclick="switchPage('transactions');return false;">
+                    <i class="fas fa-receipt"></i><span>Transactions</span>
+                    <span class="nav-badge" id="txBadge">0</span>
+                </a>
+                <a href="#" class="nav-item" data-page="salary" onclick="switchPage('salary');return false;">
+                    <i class="fas fa-wallet"></i><span>Carwasher Salary</span>
+                </a>
+                <a href="#" class="nav-item" data-page="store" onclick="switchPage('store');return false;">
+                    <i class="fas fa-store"></i><span>Store Sales</span>
+                </a>
+                <a href="#" class="nav-item" data-page="accessories" onclick="switchPage('accessories');return false;">
+                    <i class="fas fa-spray-can-sparkles"></i><span>Accessories</span>
+                </a>
+                <a href="#" class="nav-item admin-only" data-page="reports" onclick="switchPage('reports');return false;">
+                    <i class="fas fa-file-alt"></i><span>Reports</span>
+                </a>
+                <a href="#" class="nav-item admin-only" data-page="prices" onclick="switchPage('prices');return false;">
+                    <i class="fas fa-tags"></i><span>Price Settings</span>
+                </a>
+                <a href="#" class="nav-item admin-only" data-page="audit" onclick="switchPage('audit');return false;">
+                    <i class="fas fa-history"></i><span>Audit Trail</span>
+                    <span class="nav-badge" id="auditBadge">0</span>
+                </a>
+                <a href="#" class="nav-item admin-only" data-page="backup" onclick="switchPage('backup');return false;">
+                    <i class="fas fa-database"></i><span>Backup & Restore</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">👤</div>
+                    <div class="user-info-sidebar">
+                        <span id="sidebarUserName">User</span>
+                        <span class="user-role" id="sidebarUserRole">Staff</span>
+                    </div>
+                </div>
+                <button class="btn btn-danger btn-sm btn-block" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content" id="mainContent">
+            <!-- TOP BAR -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <button class="hamburger-btn" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="topbar-title-group">
+                        <h2 id="pageTitle">Dashboard</h2>
+                        <span class="badge-day" id="currentDate">Loading...</span>
+                    </div>
+                </div>
+                <div class="topbar-right-inline">
+                    <button class="btn btn-info btn-sm topbar-tour-btn" onclick="startTour()" title="Quick Tour">
+                        <i class="fas fa-question-circle"></i>
+                        <span class="tour-label">Tour</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- PAGE: DASHBOARD -->
+            <div id="page-dashboard" class="page-content active">
+                <div id="loadingSpinner" class="loading-spinner" style="display:none;">
+                    <i class="fas fa-spinner fa-spin"></i> Loading data...
+                </div>
+
+                <!-- REDESIGNED SUMMARY GRID -->
+                <div class="summary-grid-modern" id="summaryCards">
+                    <div class="hero-card" onclick="switchPage('reports')">
+                        <div class="hero-bg"></div>
+                        <div class="hero-content">
+                            <div class="hero-top">
+                                <span class="hero-label">Total Income</span>
+                                <span class="hero-icon">🧾</span>
+                            </div>
+                            <div class="hero-value" id="incomeTotal" data-count="0">₱0</div>
+                            <div class="hero-foot">
+                                <span class="hero-trend"><i class="fas fa-arrow-trend-up"></i> Live</span>
+                                <span class="hero-hint">View reports <i class="fas fa-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mini-cards">
+                        <div class="mini-card mc-carwash" onclick="switchPage('transactions')">
+                            <div class="mc-icon">🚗</div>
+                            <div class="mc-body">
+                                <div class="mc-label">Cars Washed</div>
+                                <div class="mc-value" id="carCount" data-count="0">0</div>
+                                <div class="mc-sub">this session</div>
+                            </div>
+                            <div class="mc-arrow"><i class="fas fa-chevron-right"></i></div>
+                        </div>
+                        <div class="mini-card mc-carwash-total" onclick="switchPage('transactions')">
+                            <div class="mc-icon">💰</div>
+                            <div class="mc-body">
+                                <div class="mc-label">Carwash Sales</div>
+                                <div class="mc-value" id="carwashTotal" data-count="0">₱0</div>
+                                <div class="mc-sub">all carwash</div>
+                            </div>
+                            <div class="mc-arrow"><i class="fas fa-chevron-right"></i></div>
+                        </div>
+                        <div class="mini-card mc-store" onclick="switchPage('store')">
+                            <div class="mc-icon">🏪</div>
+                            <div class="mc-body">
+                                <div class="mc-label">Store Sales</div>
+                                <div class="mc-value" id="storeTotal" data-count="0">₱0</div>
+                                <div class="mc-sub">cigarettes + snacks</div>
+                            </div>
+                            <div class="mc-arrow"><i class="fas fa-chevron-right"></i></div>
+                        </div>
+                        <div class="mini-card mc-drinks" onclick="switchPage('store')">
+                            <div class="mc-icon">🥤</div>
+                            <div class="mc-body">
+                                <div class="mc-label">Drinks Sales</div>
+                                <div class="mc-value" id="drinksTotal" data-count="0">₱0</div>
+                                <div class="mc-sub">beverages</div>
+                            </div>
+                            <div class="mc-arrow"><i class="fas fa-chevron-right"></i></div>
+                        </div>
+                        <div class="mini-card mc-paluto" onclick="switchPage('store')">
+                            <div class="mc-icon">🍜</div>
+                            <div class="mc-body">
+                                <div class="mc-label">Paluto Sales</div>
+                                <div class="mc-value" id="palutoTotal" data-count="0">₱0</div>
+                                <div class="mc-sub">food sales</div>
+                            </div>
+                            <div class="mc-arrow"><i class="fas fa-chevron-right"></i></div>
+                        </div>
+                        <div class="mini-card mc-accessories" onclick="switchPage('accessories')">
+                            <div class="mc-icon">🧴</div>
+                            <div class="mc-body">
+                                <div class="mc-label">Accessories</div>
+                                <div class="mc-value" id="accessoriesTotal" data-count="0">₱0</div>
+                                <div class="mc-sub">products</div>
+                            </div>
+                            <div class="mc-arrow"><i class="fas fa-chevron-right"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-stats">
+                    <div class="quick-stat" onclick="switchTransactionTab('ongoing');switchPage('transactions');">
+                        <span class="qs-label">🕐 Ongoing</span>
+                        <span class="qs-value" id="ongoingCount">0</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-label">Today's Earnings</span>
+                        <span class="qs-value" id="todayEarnings">₱0</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-label">Pending Payments</span>
+                        <span class="qs-value" id="pendingPayments">0</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-label">Total Transactions</span>
+                        <span class="qs-value" id="totalTransactions">0</span>
+                    </div>
+                </div>
+
+                <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;padding:0 0.25rem;">
+                    <span style="font-weight:600;font-size:1rem;">📋 Recent Transactions</span>
+                    <button class="btn btn-sm btn-outline" onclick="switchPage('transactions')">View All</button>
+                </div>
+                <div class="table-wrap">
+                    <table id="recentTable">
+                        <thead>
+                            <tr><th>#</th><th>Date</th><th>Category</th><th>Item</th><th>Total</th><th>Status</th></tr>
+                        </thead>
+                        <tbody id="recentBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PAGE: TRANSACTIONS -->
+            <div id="page-transactions" class="page-content">
+                <div class="transaction-tabs">
+                    <button class="transaction-tab active" data-tab="all" onclick="switchTransactionTab('all')">
+                        <i class="fas fa-list"></i><span>All</span>
+                        <span class="tab-count" id="allTabCount">0</span>
+                    </button>
+                    <button class="transaction-tab" data-tab="ongoing" onclick="switchTransactionTab('ongoing')">
+                        <i class="fas fa-clock"></i><span>Ongoing</span>
+                        <span class="tab-count tab-count-warning" id="ongoingTabCount">0</span>
+                    </button>
+                    <button class="transaction-tab" data-tab="completed" onclick="switchTransactionTab('completed')">
+                        <i class="fas fa-check-circle"></i><span>Completed</span>
+                        <span class="tab-count tab-count-success" id="completedTabCount">0</span>
+                    </button>
+                </div>
+
+                <div class="filter-bar" id="transactionFilters">
+                    <div class="filter-group">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search..." oninput="applyFilters()">
+                    </div>
+                    <select id="categoryFilter" onchange="applyFilters()">
+                        <option value="">All Categories</option>
+                        <option value="carwash">🚘 Carwash</option>
+                        <option value="store">🏪 Store</option>
+                        <option value="accessories">🧴 Accessories</option>
+                        <option value="drinks">🥤 Drinks</option>
+                        <option value="paluto">🍜 Paluto</option>
+                        <option value="other">💰 Other</option>
+                    </select>
+                    <select id="paymentStatusFilter" onchange="applyFilters()">
+                        <option value="">All Status</option>
+                        <option value="paid">✅ Paid</option>
+                        <option value="unpaid">❌ Unpaid</option>
+                        <option value="partial">🔄 Partial</option>
+                    </select>
+                    <span id="filterCount"></span>
+                    <button class="btn btn-sm btn-outline" onclick="clearFilters()" title="Clear Filters">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div class="transaction-tab-content">
+                    <!-- ALL TAB -->
+                    <div id="tab-all" class="tab-panel active">
+                        <div class="table-toolbar">
+                            <span class="table-title"><i class="fas fa-list"></i> All Transactions</span>
+                            <div class="table-actions">
+                                <button class="btn btn-sm btn-danger admin-only" onclick="deleteSelected()" title="Delete Selected">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline" onclick="exportData()" title="Export to Excel">
+                                    <i class="fas fa-file-export"></i> Export
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-wrap" id="tableWrap">
+                            <div id="loadingState" class="loading-spinner">Loading data...</div>
+                            <table id="transactionsTable" style="display:none;">
+                                <thead>
+                                    <tr>
+                                        <th style="width:30px;"><input type="checkbox" id="selectAll" onchange="toggleAllCheckboxes()"></th>
+                                        <th class="sortable" data-sort="id" onclick="sortTable('id')"># <span class="sort-icon">⇅</span></th>
+                                        <th class="sortable" data-sort="date" onclick="sortTable('date')">Date <span class="sort-icon">⇅</span></th>
+                                        <th class="sortable" data-sort="category" onclick="sortTable('category')">Category <span class="sort-icon">⇅</span></th>
+                                        <th class="sortable" data-sort="item" onclick="sortTable('item')">Item <span class="sort-icon">⇅</span></th>
+                                        <th class="sortable" data-sort="carwasher" onclick="sortTable('carwasher')">Carwasher <span class="sort-icon">⇅</span></th>
+                                        <th class="sortable" data-sort="total" onclick="sortTable('total')">Total <span class="sort-icon">⇅</span></th>
+                                        <th class="sortable" data-sort="status" onclick="sortTable('status')">Status <span class="sort-icon">⇅</span></th>
+                                        <th style="width:110px;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactionsBody"></tbody>
+                                <tfoot id="transactionsFooter"></tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- ONGOING TAB -->
+                    <div id="tab-ongoing" class="tab-panel">
+                        <div class="ongoing-stats" id="ongoingStats">
+                            <div class="ongoing-stat ongoing-stat-overdue" id="ongoingOverdueCard">
+                                <div class="ongoing-stat-icon">⏰</div>
+                                <div class="ongoing-stat-info">
+                                    <div class="ongoing-stat-label">Overdue (>1h)</div>
+                                    <div class="ongoing-stat-value" id="ongoingOverdue">0</div>
+                                </div>
+                            </div>
+                            <div class="ongoing-stat">
+                                <div class="ongoing-stat-icon">🕐</div>
+                                <div class="ongoing-stat-info">
+                                    <div class="ongoing-stat-label">In Progress</div>
+                                    <div class="ongoing-stat-value" id="ongoingInProgress">0</div>
+                                </div>
+                            </div>
+                            <div class="ongoing-stat">
+                                <div class="ongoing-stat-icon">⏱️</div>
+                                <div class="ongoing-stat-info">
+                                    <div class="ongoing-stat-label">Avg Time</div>
+                                    <div class="ongoing-stat-value" id="ongoingAvgTime">0 min</div>
+                                </div>
+                            </div>
+                            <div class="ongoing-stat">
+                                <div class="ongoing-stat-icon">💰</div>
+                                <div class="ongoing-stat-info">
+                                    <div class="ongoing-stat-label">Expected Revenue</div>
+                                    <div class="ongoing-stat-value" id="ongoingRevenue">₱0</div>
+                                </div>
+                            </div>
+                            <div class="ongoing-stat">
+                                <div class="ongoing-stat-icon">🚗</div>
+                                <div class="ongoing-stat-info">
+                                    <div class="ongoing-stat-label">Bays Available</div>
+                                    <div class="ongoing-stat-value" id="baysAvailable">4</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-toolbar">
+                            <span class="table-title"><i class="fas fa-clock"></i> Cars Being Washed — <span id="ongoingDateLabel">Today</span></span>
+                            <div class="table-actions">
+                                <div class="date-filter-group">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <input type="date" id="ongoingDateFilter" onchange="onOngoingDateChange(this.value)" title="Filter by date">
+                                    <button class="btn btn-sm btn-outline" onclick="jumpToToday('ongoing')" title="Today">
+                                        <i class="fas fa-calendar-day"></i>
+                                    </button>
+                                </div>
+                                <button class="btn btn-sm btn-primary" onclick="openAddModal()">
+                                    <i class="fas fa-plus"></i> New
+                                </button>
+                                <button class="btn btn-sm btn-outline" onclick="refreshOngoing()">
+                                    <i class="fas fa-sync"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="alert-box alert-info" style="margin-bottom: 0.5rem;">
+                            <i class="fas fa-bell"></i>
+                            <span>
+                                Setting payment to <strong>PAID</strong> will automatically move the wash to <strong>Completed</strong>.
+                                Washes running over <strong>1 hour</strong> are flagged as <span style="color:var(--danger);font-weight:800;">overdue</span>.
+                            </span>
+                        </div>
+
+                        <div class="table-wrap">
+                            <table id="ongoingTable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Bay</th>
+                                        <th>Car Model</th>
+                                        <th>Plate</th>
+                                        <th>Services</th>
+                                        <th>Carwasher</th>
+                                        <th>Started</th>
+                                        <th>Elapsed</th>
+                                        <th>Total</th>
+                                        <th>Payment</th>
+                                        <th style="width:140px;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ongoingBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- COMPLETED TAB -->
+                    <div id="tab-completed" class="tab-panel">
+                        <div class="ongoing-stats">
+                            <div class="ongoing-stat" style="border-left-color: var(--success);">
+                                <div class="ongoing-stat-icon">✅</div>
+                                <div class="ongoing-stat-info">
+                                    <div class="ongoing-stat-label">Total Completed</div>
+                                    <div class="ongoing-stat-value" id="completedTotal">0</div>
+                                </div>
+                            </div>
+                            <div class="ongoing-stat" style="border-left-color: var(--success);">
+                                <div class="ongoing-stat-icon">💵</div>
+                                <div class="ongoing-stat-info">
+                                    <div class="ongoing-stat-label">Revenue</div>
+                                    <div class="ongoing-stat-value" id="completedRevenue">₱0</div>
+                                </div>
+                            </div>
+                            <div class="ongoing-stat" style="border-left-color: var(--success);">
+                                <div class="ongoing-stat-icon">📅</div>
+                                <div class="ongoing-stat-info">
+                                    <div class="ongoing-stat-label">On Selected Date</div>
+                                    <div class="ongoing-stat-value" id="completedToday">0</div>
+                                </div>
+                            </div>
+                            <div class="ongoing-stat" style="border-left-color: var(--success);">
+                                <div class="ongoing-stat-icon">⏱️</div>
+                                <div class="ongoing-stat-info">
+                                    <div class="ongoing-stat-label">Avg Duration</div>
+                                    <div class="ongoing-stat-value" id="completedAvgDuration">0 min</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-toolbar">
+                            <span class="table-title"><i class="fas fa-check-circle"></i> Completed — <span id="completedDateLabel">Today</span></span>
+                            <div class="table-actions">
+                                <div class="date-filter-group">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <input type="date" id="completedDateFilter" onchange="onCompletedDateChange(this.value)" title="Filter by date">
+                                    <button class="btn btn-sm btn-outline" onclick="jumpToToday('completed')" title="Today">
+                                        <i class="fas fa-calendar-day"></i>
+                                    </button>
+                                </div>
+                                <button class="btn btn-sm btn-outline" onclick="exportCompleted()">
+                                    <i class="fas fa-file-export"></i> Export
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="filter-bar" style="margin-bottom: 0.5rem;">
+                            <div class="filter-group">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="completedSearch" placeholder="Search completed..." oninput="filterCompleted()">
+                            </div>
+                            <select id="completedStatusFilter" onchange="filterCompleted()">
+                                <option value="">All Status</option>
+                                <option value="paid">✅ Paid</option>
+                                <option value="unpaid">❌ Unpaid</option>
+                                <option value="partial">🔄 Partial</option>
+                            </select>
+                            <span id="completedFilterCount" style="font-size:0.75rem;color:#94a3b8;"></span>
+                        </div>
+
+                        <div class="table-wrap">
+                            <table id="completedTable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Time</th>
+                                        <th>Car Model</th>
+                                        <th>Plate</th>
+                                        <th>Services</th>
+                                        <th>Carwasher</th>
+                                        <th>Duration</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th style="width:100px;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="completedBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE: SALARY -->
+            <div id="page-salary" class="page-content">
+                <div class="salary-header">
+                    <div class="salary-header-left">
+                        <h3><i class="fas fa-wallet"></i> Carwasher Salary</h3>
+                        <p>Manage and calculate salaries for your carwashers</p>
+                    </div>
+                    <div class="salary-header-right">
+                        <button class="btn btn-success" onclick="calculateSalaries()">
+                            <i class="fas fa-calculator"></i> Calculate
+                        </button>
+                        <button class="btn btn-primary" onclick="saveSalaries()">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                        <button class="btn btn-outline" onclick="exportSalaries()">
+                            <i class="fas fa-file-export"></i> Export
+                        </button>
+                    </div>
+                </div>
+
+                <div class="salary-date-range" style="background:white; border-radius:var(--border-radius); padding:1rem 1.25rem; box-shadow:var(--shadow); border:1px solid var(--gray-200); margin-bottom:1rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+                        <div style="flex:1; min-width:280px;">
+                            <label style="display:block; font-weight:600; font-size:0.8rem; color:var(--gray-600); margin-bottom:0.5rem;">
+                                <i class="fas fa-calendar-alt"></i> Date Range
+                            </label>
+                            <select id="salaryDatePreset" onchange="updateSalaryDateRange()" style="padding:0.4rem 0.7rem; border:2px solid var(--gray-200); border-radius:8px; font-size:0.85rem; min-width:160px; cursor:pointer;">
+                                <option value="today">📅 Today</option>
+                                <option value="this-week" selected>📅 This Week</option>
+                                <option value="last-week">📅 Last Week</option>
+                                <option value="this-month">📅 This Month</option>
+                                <option value="last-month">📅 Last Month</option>
+                                <option value="custom">📅 Custom Range</option>
+                                <option value="all">📅 All Time</option>
+                            </select>
+                            <div id="salaryCustomDateRange" style="display:none; gap:0.5rem; flex-wrap:wrap; align-items:flex-end; margin-top:0.75rem;">
+                                <div>
+                                    <label style="display:block; font-size:0.7rem; font-weight:600; color:var(--gray-600); margin-bottom:0.2rem;">From:</label>
+                                    <input type="date" id="salaryDateFrom" style="padding:0.4rem 0.7rem; border:2px solid var(--gray-200); border-radius:8px; font-size:0.85rem;">
+                                </div>
+                                <div>
+                                    <label style="display:block; font-size:0.7rem; font-weight:600; color:var(--gray-600); margin-bottom:0.2rem;">To:</label>
+                                    <input type="date" id="salaryDateTo" style="padding:0.4rem 0.7rem; border:2px solid var(--gray-200); border-radius:8px; font-size:0.85rem;">
+                                </div>
+                                <button class="btn btn-primary btn-sm" onclick="applyCustomSalaryDateRange()" style="height:38px;">
+                                    <i class="fas fa-check"></i> Apply
+                                </button>
+                            </div>
+                        </div>
+                        <div style="text-align:right; min-width:180px;">
+                            <div id="salaryDateRangeDisplay" style="font-size:0.85rem; color:var(--gray-700); padding:0.5rem 0.75rem; background:var(--primary-light); border-radius:8px; border:1px solid var(--primary);">
+                                <i class="fas fa-calendar-alt"></i> <strong>This Week:</strong> —
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="salary-summary" id="salarySummary">
+                    <div class="salary-stat"><span class="ss-label">Total Carwashers</span><span class="ss-value" id="totalCarwashers">0</span></div>
+                    <div class="salary-stat"><span class="ss-label">Total Cars Washed</span><span class="ss-value" id="totalCarsWashed">0</span></div>
+                    <div class="salary-stat"><span class="ss-label">Total Salary</span><span class="ss-value" id="totalSalaryAmount">₱0</span></div>
+                    <div class="salary-stat"><span class="ss-label">Paid</span><span class="ss-value" id="salaryPaidCount">0</span></div>
+                    <div class="salary-stat"><span class="ss-label">Pending</span><span class="ss-value" id="salaryPendingCount">0</span></div>
+                </div>
+
+                <div class="alert-box alert-info" style="margin-bottom:0.75rem;">
+                    <i class="fas fa-hand-pointer"></i>
+                    <span>Click on a carwasher row to view their job list for the selected date range.</span>
+                </div>
+
+                <div class="table-wrap">
+                    <table id="salaryTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Carwasher</th>
+                                <th>Cars Washed</th>
+                                <th>Total Earnings</th>
+                                <th>Rate</th>
+                                <th>Salary</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salaryBody"></tbody>
+                        <tfoot id="salaryFooter"></tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PAGE: STORE (Kiosk Style) -->
+            <div id="page-store" class="page-content">
+                <div class="kiosk-layout">
+                    <div class="kiosk-main">
+                        <div class="kiosk-tabs">
+                            <button class="kiosk-tab active" data-kiosk="store" onclick="switchKioskMode('store')">
+                                <i class="fas fa-store"></i> Store
+                            </button>
+                            <button class="kiosk-tab" data-kiosk="accessories" onclick="switchKioskMode('accessories')">
+                                <i class="fas fa-spray-can-sparkles"></i> Accessories
+                            </button>
+                        </div>
+
+                        <div class="kiosk-toolbar">
+                            <div class="kiosk-search">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="kioskSearch" placeholder="Search products..." oninput="filterKioskProducts()">
+                            </div>
+                            <select id="kioskCategoryFilter" class="kiosk-category-filter" onchange="filterKioskProducts()">
+                                <option value="all">All Categories</option>
+                            </select>
+                            <button class="btn btn-sm btn-primary" onclick="openProductModal()">
+                                <i class="fas fa-plus"></i> Add Product
+                            </button>
+                        </div>
+
+                        <div id="kioskGrid" class="kiosk-grid"></div>
+                    </div>
+
+                    <div class="kiosk-cart-panel" id="kioskCartPanel">
+                        <div class="kiosk-cart-header" onclick="toggleMobileCart()">
+                            <div>
+                                <div class="kiosk-cart-title"><i class="fas fa-shopping-cart"></i> Cart</div>
+                                <div class="kiosk-cart-sub"><span id="kioskCartCount">0</span> items</div>
+                            </div>
+                            <button class="btn btn-sm btn-outline" onclick="event.stopPropagation();clearCart()" title="Clear cart">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+
+                        <div class="kiosk-cart-items" id="kioskCartItems"></div>
+
+                        <div class="kiosk-cart-empty" id="kioskCartEmpty">
+                            <div style="font-size:3rem; opacity:0.3;">🛒</div>
+                            <div style="font-weight:600; color:var(--gray-500); margin-top:0.5rem;">Cart is empty</div>
+                            <div style="font-size:0.75rem; color:var(--gray-400); margin-top:0.25rem;">Tap any product to add</div>
+                        </div>
+
+                        <div class="kiosk-cart-footer">
+                            <div class="kiosk-summary-row">
+                                <span>Subtotal</span>
+                                <span id="kioskSubtotal">₱0.00</span>
+                            </div>
+                            <div class="kiosk-summary-row kiosk-summary-total">
+                                <span>TOTAL</span>
+                                <span id="kioskTotal">₱0.00</span>
+                            </div>
+                            <div class="kiosk-payment-row">
+                                <label>Payment</label>
+                                <select id="kioskPayment">
+                                    <option value="CASH">💵 CASH</option>
+                                    <option value="GCASH">📱 GCASH</option>
+                                    <option value="MARI BANK">🏦 MARI BANK</option>
+                                    <option value="OTHER BANKS">🏦 OTHER BANKS</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-success kiosk-checkout-btn" id="kioskCheckoutBtn" onclick="kioskCheckout()" disabled>
+                                <i class="fas fa-check"></i> Complete Sale
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="store-summary" id="storeSummary" style="margin-top:1.5rem;">
+                    <div class="store-summary-item">
+                        <div class="label">📦 Store Items</div>
+                        <div class="value primary" id="storeItemsSummary">₱0</div>
+                    </div>
+                    <div class="store-summary-item">
+                        <div class="label">🥤 Drinks</div>
+                        <div class="value" id="totalDrinksSummary">₱0</div>
+                    </div>
+                    <div class="store-summary-item">
+                        <div class="label">🍜 Paluto</div>
+                        <div class="value" id="totalPalutoSummary">₱0</div>
+                    </div>
+                    <div class="store-summary-item">
+                        <div class="label">💰 Other Income</div>
+                        <div class="value success" id="totalOtherSummary">₱0</div>
+                    </div>
+                    <div class="store-summary-item">
+                        <div class="label">🧾 Grand Total</div>
+                        <div class="value" style="color:var(--primary);font-weight:700;" id="totalStoreSales">₱0</div>
+                    </div>
+                </div>
+
+                <div class="store-history">
+                    <div class="store-history-header">
+                        <h4><i class="fas fa-clock"></i> Recent Transactions</h4>
+                        <button class="btn btn-sm btn-outline" onclick="switchPage('transactions')">View All</button>
+                    </div>
+                    <div class="table-wrap">
+                        <table id="storeHistoryTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Date</th>
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th style="width:80px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="storeHistoryBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE: ACCESSORIES (Kiosk Style) -->
+            <div id="page-accessories" class="page-content">
+                <div class="kiosk-layout">
+                    <div class="kiosk-main">
+                        <div class="kiosk-tabs">
+                            <button class="kiosk-tab" data-kiosk="store" onclick="switchKioskMode('store')">
+                                <i class="fas fa-store"></i> Store
+                            </button>
+                            <button class="kiosk-tab active" data-kiosk="accessories" onclick="switchKioskMode('accessories')">
+                                <i class="fas fa-spray-can-sparkles"></i> Accessories
+                            </button>
+                        </div>
+
+                        <div class="kiosk-toolbar">
+                            <div class="kiosk-search">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="kioskSearchAcc" placeholder="Search accessories..." oninput="filterKioskProducts()">
+                            </div>
+                            <select id="kioskCategoryFilterAcc" class="kiosk-category-filter" onchange="filterKioskProducts()" style="display:none;">
+                                <option value="accessories">Accessories</option>
+                            </select>
+                            <button class="btn btn-sm btn-primary" onclick="openProductModal()">
+                                <i class="fas fa-plus"></i> Add Accessory
+                            </button>
+                        </div>
+
+                        <div id="kioskGridAcc" class="kiosk-grid"></div>
+                    </div>
+
+                    <div class="kiosk-cart-panel" id="kioskCartPanelAcc">
+                        <div class="kiosk-cart-header" onclick="toggleMobileCart()">
+                            <div>
+                                <div class="kiosk-cart-title"><i class="fas fa-shopping-cart"></i> Cart</div>
+                                <div class="kiosk-cart-sub"><span id="kioskCartCountAcc">0</span> items</div>
+                            </div>
+                            <button class="btn btn-sm btn-outline" onclick="event.stopPropagation();clearCart()" title="Clear cart">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+
+                        <div class="kiosk-cart-items" id="kioskCartItemsAcc"></div>
+
+                        <div class="kiosk-cart-empty" id="kioskCartEmptyAcc">
+                            <div style="font-size:3rem; opacity:0.3;">🛒</div>
+                            <div style="font-weight:600; color:var(--gray-500); margin-top:0.5rem;">Cart is empty</div>
+                            <div style="font-size:0.75rem; color:var(--gray-400); margin-top:0.25rem;">Tap any accessory to add</div>
+                        </div>
+
+                        <div class="kiosk-cart-footer">
+                            <div class="kiosk-summary-row">
+                                <span>Subtotal</span>
+                                <span id="kioskSubtotalAcc">₱0.00</span>
+                            </div>
+                            <div class="kiosk-summary-row kiosk-summary-total">
+                                <span>TOTAL</span>
+                                <span id="kioskTotalAcc">₱0.00</span>
+                            </div>
+                            <div class="kiosk-payment-row">
+                                <label>Payment</label>
+                                <select id="kioskPaymentAcc">
+                                    <option value="CASH">💵 CASH</option>
+                                    <option value="GCASH">📱 GCASH</option>
+                                    <option value="MARI BANK">🏦 MARI BANK</option>
+                                    <option value="OTHER BANKS">🏦 OTHER BANKS</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-success kiosk-checkout-btn" id="kioskCheckoutBtnAcc" onclick="kioskCheckout()" disabled>
+                                <i class="fas fa-check"></i> Complete Sale
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="store-summary" id="accessoriesSummary" style="margin-top:1.5rem;">
+                    <div class="store-summary-item">
+                        <div class="label">🧴 Total Sales</div>
+                        <div class="value primary" id="totalAccessoriesSales">₱0</div>
+                    </div>
+                    <div class="store-summary-item">
+                        <div class="label">📦 Items Sold</div>
+                        <div class="value" id="totalAccessoriesItems">0</div>
+                    </div>
+                    <div class="store-summary-item">
+                        <div class="label">💰 Average Sale</div>
+                        <div class="value success" id="avgAccessorySale">₱0</div>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <table id="accessoriesTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Date</th>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Total</th>
+                                <th>Payment</th>
+                                <th>Status</th>
+                                <th style="width:100px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accessoriesBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PAGE: REPORTS -->
+            <div id="page-reports" class="page-content">
+                <div class="reports-header">
+                    <div class="reports-header-left">
+                        <h3><i class="fas fa-file-alt"></i> Sales Reports</h3>
+                        <p>Generate detailed reports by category and export them individually or all at once</p>
+                    </div>
+                </div>
+
+                <div class="reports-controls">
+                    <div class="report-preset-row">
+                        <span class="preset-label"><i class="fas fa-calendar-alt"></i> Period:</span>
+                        <button class="btn btn-sm btn-primary report-preset-btn active" data-preset="daily" onclick="setReportPreset('daily')">
+                            <i class="fas fa-calendar-day"></i> Daily
+                        </button>
+                        <button class="btn btn-sm btn-outline report-preset-btn" data-preset="weekly" onclick="setReportPreset('weekly')">
+                            <i class="fas fa-calendar-week"></i> Weekly
+                        </button>
+                        <button class="btn btn-sm btn-outline report-preset-btn" data-preset="monthly" onclick="setReportPreset('monthly')">
+                            <i class="fas fa-calendar-alt"></i> Monthly
+                        </button>
+                        <button class="btn btn-sm btn-outline report-preset-btn" data-preset="yearly" onclick="setReportPreset('yearly')">
+                            <i class="fas fa-calendar"></i> Yearly
+                        </button>
+                        <button class="btn btn-sm btn-outline report-preset-btn" data-preset="custom" onclick="setReportPreset('custom')">
+                            <i class="fas fa-sliders-h"></i> Custom
+                        </button>
+                    </div>
+                    <div id="customDateRange" style="display:none; margin-top: 0.85rem;">
+                        <div class="date-range">
+                            <div><label>From:</label><input type="date" id="reportDateFrom"></div>
+                            <div><label>To:</label><input type="date" id="reportDateTo"></div>
+                        </div>
+                    </div>
+                    <div class="report-period-display" id="reportPeriodDisplay">
+                        <i class="fas fa-clock"></i> <span>Select period</span>
+                    </div>
+                </div>
+
+                <div class="report-category-selector">
+                    <div class="rcs-header">
+                        <span class="rcs-title"><i class="fas fa-filter"></i> Include Categories</span>
+                        <div class="rcs-actions">
+                            <button class="btn btn-sm btn-outline" onclick="selectAllCategories(true)">
+                                <i class="fas fa-check-double"></i> All
+                            </button>
+                            <button class="btn btn-sm btn-outline" onclick="selectAllCategories(false)">
+                                <i class="fas fa-times"></i> None
+                            </button>
+                        </div>
+                    </div>
+                    <div class="rcs-grid">
+                        <label class="rcs-chip rcs-carwash">
+                            <input type="checkbox" class="rcs-checkbox" value="carwash" checked>
+                            <span class="rcs-chip-content">
+                                <span class="rcs-icon">🚘</span>
+                                <span class="rcs-label">Carwash</span>
+                            </span>
+                        </label>
+                        <label class="rcs-chip rcs-store">
+                            <input type="checkbox" class="rcs-checkbox" value="store" checked>
+                            <span class="rcs-chip-content">
+                                <span class="rcs-icon">🏪</span>
+                                <span class="rcs-label">Store</span>
+                            </span>
+                        </label>
+                        <label class="rcs-chip rcs-accessories">
+                            <input type="checkbox" class="rcs-checkbox" value="accessories" checked>
+                            <span class="rcs-chip-content">
+                                <span class="rcs-icon">🧴</span>
+                                <span class="rcs-label">Accessories</span>
+                            </span>
+                        </label>
+                        <label class="rcs-chip rcs-drinks">
+                            <input type="checkbox" class="rcs-checkbox" value="drinks" checked>
+                            <span class="rcs-chip-content">
+                                <span class="rcs-icon">🥤</span>
+                                <span class="rcs-label">Drinks</span>
+                            </span>
+                        </label>
+                        <label class="rcs-chip rcs-paluto">
+                            <input type="checkbox" class="rcs-checkbox" value="paluto" checked>
+                            <span class="rcs-chip-content">
+                                <span class="rcs-icon">🍜</span>
+                                <span class="rcs-label">Paluto</span>
+                            </span>
+                        </label>
+                        <label class="rcs-chip rcs-other">
+                            <input type="checkbox" class="rcs-checkbox" value="other" checked>
+                            <span class="rcs-chip-content">
+                                <span class="rcs-icon">💰</span>
+                                <span class="rcs-label">Other</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="reports-action-row">
+                    <button class="btn btn-primary" onclick="generateMultiReports()">
+                        <i class="fas fa-play"></i> Generate Reports
+                    </button>
+                    <button class="btn btn-success" onclick="exportAllReportsExcel()">
+                        <i class="fas fa-file-excel"></i> Export All (Excel)
+                    </button>
+                    <button class="btn btn-danger" onclick="exportAllReportsPDF()">
+                        <i class="fas fa-file-pdf"></i> Export All (PDF)
+                    </button>
+                    <button class="btn btn-outline" onclick="printAllReports()">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                </div>
+
+                <div id="reportTotalsBar" class="report-totals-bar" style="display:none;">
+                    <div class="rtb-item rtb-grand">
+                        <span class="rtb-label">Grand Total</span>
+                        <span class="rtb-value" id="rtbGrand">₱0.00</span>
+                    </div>
+                    <div class="rtb-item rtb-txcount">
+                        <span class="rtb-label">Transactions</span>
+                        <span class="rtb-value" id="rtbTxCount">0</span>
+                    </div>
+                    <div class="rtb-item rtb-count">
+                        <span class="rtb-label">Categories</span>
+                        <span class="rtb-value" id="rtbCategories">0</span>
+                    </div>
+                    <div class="rtb-item rtb-period">
+                        <span class="rtb-label">Period</span>
+                        <span class="rtb-value" id="rtbPeriod">—</span>
+                    </div>
+                </div>
+
+                <div id="reportResults" class="report-results-container"></div>
+            </div>
+
+            <!-- PAGE: PRICES -->
+            <div id="page-prices" class="page-content">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h3><i class="fas fa-tags"></i> Price Settings</h3>
+                        <p>Manage service names, sizes and prices. Changes save on Save All.</p>
+                    </div>
+                    <div class="section-header-right">
+                        <button class="btn btn-primary" onclick="openAddServiceModal()">
+                            <i class="fas fa-plus"></i> Add Service
+                        </button>
+                        <button class="btn btn-success" onclick="saveAllPrices()">
+                            <i class="fas fa-save"></i> Save All
+                        </button>
+                        <button class="btn btn-outline" onclick="loadServicePrices()">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+                <div class="price-settings-container">
+                    <div class="flex-between" style="margin-bottom: 0.5rem;">
+                        <div>
+                            <div class="section-title">Service Price List</div>
+                            <div class="section-subtitle">Edit name, size or price. Names and sizes are editable inline.</div>
+                        </div>
+                        <div style="font-size:0.8rem;color:var(--gray-500);"><span id="priceCount">0</span> services</div>
+                    </div>
+                    <div id="priceSettingsContainer"><div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Loading prices...</div></div>
+                </div>
+            </div>
+
+            <!-- PAGE: AUDIT -->
+            <div id="page-audit" class="page-content">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h3><i class="fas fa-history"></i> Audit Trail</h3>
+                        <p>View all system activities and transaction history</p>
+                    </div>
+                    <div class="section-header-right">
+                        <button class="btn btn-sm btn-outline" onclick="refreshAudit()"><i class="fas fa-sync"></i> Refresh</button>
+                        <button class="btn btn-sm btn-outline" onclick="exportAuditLogs()"><i class="fas fa-file-export"></i> Export</button>
+                    </div>
+                </div>
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="auditSearch" placeholder="Search audit logs..." oninput="filterAudit()">
+                    </div>
+                    <select id="auditActionFilter" onchange="filterAudit()">
+                        <option value="">All Actions</option>
+                        <option value="LOGIN">🔐 Login</option>
+                        <option value="LOGOUT">🚪 Logout</option>
+                        <option value="ADD">✅ Add</option>
+                        <option value="UPDATE">📝 Update</option>
+                        <option value="DELETE">🗑️ Delete</option>
+                        <option value="PRICE_UPDATE">💰 Price Update</option>
+                        <option value="SALARY_UPDATE">💵 Salary Update</option>
+                    </select>
+                    <span id="auditCount" style="font-size:0.75rem;color:#94a3b8;"></span>
+                </div>
+                <div class="table-wrap">
+                    <table id="auditTable">
+                        <thead><tr><th>#</th><th>Date & Time</th><th>Action</th><th>User</th><th>Description</th><th>Details</th></tr></thead>
+                        <tbody id="auditBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PAGE: BACKUP -->
+            <div id="page-backup" class="page-content">
+                <div class="section-header">
+                    <div class="section-header-left">
+                        <h3><i class="fas fa-database"></i> Backup & Restore</h3>
+                        <p>Create database backups and restore from backup files</p>
+                    </div>
+                </div>
+                <div class="backup-grid">
+                    <div class="backup-card">
+                        <h4><i class="fas fa-download" style="color:var(--primary);"></i> Create Backup</h4>
+                        <p>Download a complete backup of all data.</p>
+                        <button class="btn btn-primary btn-block" onclick="createBackup()">
+                            <i class="fas fa-database"></i> Download Backup
+                        </button>
+                    </div>
+                    <div class="backup-card">
+                        <h4><i class="fas fa-upload" style="color:var(--success);"></i> Restore from Backup</h4>
+                        <p>Upload a backup file. This will replace all current data.</p>
+                        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                            <input type="file" id="restoreFileInput" accept=".json" style="flex:1; padding:0.3rem; border:2px solid var(--gray-200); border-radius:8px; font-size:0.85rem;">
+                            <button class="btn btn-success" onclick="restoreFromBackup()">
+                                <i class="fas fa-upload"></i> Restore
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="backup-card" style="margin-top:1.5rem;">
+                    <h4><i class="fas fa-history"></i> Backup History</h4>
+                    <div id="backupHistoryContainer">
+                        <div class="empty-state" style="padding:1rem;">
+                            <i class="fas fa-inbox" style="font-size:1.5rem; color:var(--gray-300);"></i>
+                            <p style="color:var(--gray-400);">No backups created in this session.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODALS -->
+    <!-- ============================================================ -->
+
+    <!-- TRANSACTION MODAL -->
+    <div class="modal-overlay" id="transactionModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">📝 New Transaction</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="transactionForm" onsubmit="saveTransaction(event)" novalidate>
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label>Transaction Type <span class="required">*</span></label>
+                    <select id="formCategory" onchange="toggleTransactionFields()">
+                        <option value="carwash">🚘 Carwash</option>
+                        <option value="store">🏪 Store Item</option>
+                        <option value="accessories">🧴 Accessories</option>
+                        <option value="drinks">🥤 Drinks</option>
+                        <option value="paluto">🍜 Paluto</option>
+                        <option value="other">💰 Other</option>
+                    </select>
+                </div>
+
+                <div id="carwashFields">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Bay <span class="required">*</span></label>
+                            <input type="hidden" id="formBay">
+                            <div class="bay-picker" id="bayPicker"></div>
+                            <div class="bay-picker-hint" id="bayPickerHint">
+                                <i class="fas fa-info-circle"></i> Occupied bays are disabled
+                            </div>
+                            <div class="field-error" id="err-formBay"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Plate Number <span class="field-optional">(optional)</span></label>
+                            <input type="text" id="formPlate" placeholder="e.g. ABC 1234" maxlength="12">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Car Model <span class="required">*</span></label>
+                        <div class="dropdown-with-add">
+                            <select id="formModel"><option value="">Select car model...</option></select>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="addDropdownItem('model')" title="Add new model">+</button>
+                        </div>
+                        <div class="field-hint" id="hint-formModel">Pick the car model from the list</div>
+                        <div class="field-error" id="err-formModel"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Services <span class="required">*</span></label>
+                        <div class="service-select-row">
+                            <select id="formServices"><option value="">Select service & size...</option></select>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="addServiceToSelection()">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
+                        <div class="field-hint" id="hint-formServices">Choose a service and click Add</div>
+                        <div class="field-error" id="err-formServices"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Selected Services <span class="required">*</span></label>
+                        <div id="selectedServicesContainer" class="selected-services-container">
+                            <span style="color:#94a3b8;font-size:0.85rem;">No services selected — add at least one</span>
+                        </div>
+                        <div class="service-total">Service Total: <span id="serviceTotalDisplay">₱0.00</span></div>
+                        <div class="field-error" id="err-selectedServices"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Carwasher <span class="required">*</span></label>
+                        <div class="dropdown-with-add">
+                            <select id="formCarwasher"><option value="">Select carwasher...</option></select>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="addDropdownItem('carwasher')" title="Add new carwasher">+</button>
+                        </div>
+                        <div class="field-error" id="err-formCarwasher"></div>
+                    </div>
+
+                    <div class="store-order-section">
+                        <div class="store-order-header">
+                            <span style="color: #8b5cf6; font-weight: 700;">🛒 Store Order</span>
+                            <span class="field-optional">(optional)</span>
+                        </div>
+                        <div class="store-order-item-input">
+                            <input type="text" id="formStoreItemName" placeholder="Item name" maxlength="40">
+                            <input type="number" id="formStoreItemPrice" placeholder="Price" step="0.01" min="0">
+                            <button type="button" class="btn btn-sm btn-primary" onclick="addCustomStoreItem()">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="store-order-quick-buttons">
+                            <button type="button" class="btn btn-sm btn-outline" onclick="addStoreItemToCarwash('Cigarettes', 12)">🚬 Cigarettes</button>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="addStoreItemToCarwash('Snacks', 10)">🍪 Snacks</button>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="addStoreItemToCarwash('Water', 15)">💧 Water</button>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="addStoreItemToCarwash('Soft Drinks', 15)">🥤 Soft Drinks</button>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="addStoreItemToCarwash('Coffee', 25)">☕ Coffee</button>
+                        </div>
+                        <div id="storeItemsContainer" class="store-items-list"></div>
+                        <div class="store-total">Store Total: <span id="storeOrderTotal">₱0.00</span></div>
+                    </div>
+
+                    <div class="form-group total-display">
+                        <label>Total Amount:</label>
+                        <div id="formTotalDisplay">₱0.00</div>
+                    </div>
+                </div>
+
+                <div id="storeFields" style="display:none;">
+                    <div class="form-group">
+                        <label>Item Name <span class="required">*</span></label>
+                        <input type="text" id="formItem" placeholder="e.g. Marlboro, Coca-Cola" maxlength="60">
+                        <div class="field-error" id="err-formItem"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Quantity <span class="required">*</span></label>
+                            <input type="number" id="formQuantity" step="0.01" min="0.01" placeholder="e.g. 1" onchange="calculateStoreTotal()">
+                            <div class="field-error" id="err-formQuantity"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>Unit Price (₱) <span class="required">*</span></label>
+                            <input type="number" id="formUnitPrice" step="0.01" min="0.01" placeholder="e.g. 25.00" onchange="calculateStoreTotal()">
+                            <div class="field-error" id="err-formUnitPrice"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Total (₱)</label>
+                        <input type="text" id="formStoreTotal" placeholder="0.00" readonly style="background:#f1f5f9;font-weight:700;">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Payment Method <span class="required">*</span></label>
+                        <select id="formPayment">
+                            <option value="CASH">💵 CASH</option>
+                            <option value="GCASH">📱 GCASH</option>
+                            <option value="MARI BANK">🏦 MARI BANK</option>
+                            <option value="INSTA PAY">⚡ INSTA PAY</option>
+                            <option value="OTHER BANKS">🏦 OTHER BANKS</option>
+                            <option value="FREE CW/QW">🎁 FREE CW/QW</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Status <span class="required">*</span></label>
+                        <select id="formPaymentStatus">
+                            <option value="unpaid">❌ Unpaid</option>
+                            <option value="paid">✅ Paid</option>
+                            <option value="partial">🔄 Partial</option>
+                        </select>
+                        <div class="field-hint" id="hint-formPaymentStatus">Carwash must be PAID before completing</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Remarks <span class="field-optional">(optional)</span></label>
+                    <input type="text" id="formRemarks" placeholder="Any notes about this transaction" maxlength="120">
+                </div>
+
+                <div class="form-validation-summary" id="formValidationSummary" style="display:none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="formValidationSummaryText">Please complete required fields</span>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="modalSubmitBtn" disabled>
+                        <i class="fas fa-save"></i> Save Transaction
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- STORE ITEM MODAL -->
+    <div class="modal-overlay" id="storeItemModal">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>🏪 Add Store Sale</h2>
+                <button class="modal-close" onclick="closeStoreItemModal()">&times;</button>
+            </div>
+            <form id="storeItemForm" onsubmit="saveStoreItem(event)">
+                <div class="form-group">
+                    <label>Category <span class="required">*</span></label>
+                    <select id="storeItemCategory" onchange="updateStoreItemPrice()">
+                        <option value="">Select category...</option>
+                        <option value="store">📦 Store Items</option>
+                        <option value="drinks">🥤 Drinks</option>
+                        <option value="paluto">🍜 Paluto</option>
+                        <option value="other">💰 Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Item <span class="required">*</span></label>
+                    <div style="display:flex;gap:0.4rem;">
+                        <select id="storeItemSelect" onchange="updateStoreItemPrice()" style="flex:1;">
+                            <option value="">Select item...</option>
+                        </select>
+                        <input type="text" id="storeItemCustom" placeholder="Or type custom" style="flex:1;">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Quantity</label><input type="number" id="storeItemQuantity" value="1" min="1" step="1" onchange="calculateStoreItemTotal()"></div>
+                    <div class="form-group"><label>Unit Price (₱)</label><input type="number" id="storeItemPrice" step="0.01" placeholder="0.00" onchange="calculateStoreItemTotal()"></div>
+                </div>
+                <div class="form-group"><label>Total (₱)</label><input type="text" id="storeItemTotal" placeholder="0.00" readonly style="background:#f1f5f9;font-weight:700;"></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Payment</label>
+                        <select id="storeItemPayment">
+                            <option value="CASH">CASH</option>
+                            <option value="GCASH">GCASH</option>
+                            <option value="MARI BANK">MARI BANK</option>
+                            <option value="OTHER BANKS">OTHER BANKS</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Status</label>
+                        <select id="storeItemPaymentStatus">
+                            <option value="paid">✅ Paid</option>
+                            <option value="unpaid">❌ Unpaid</option>
+                            <option value="partial">🔄 Partial</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeStoreItemModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Sale</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADD SERVICE MODAL -->
+    <div class="modal-overlay" id="addServiceModal">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>➕ Add New Service</h2>
+                <button class="modal-close" onclick="closeAddServiceModal()">&times;</button>
+            </div>
+            <form id="addServiceForm" onsubmit="saveNewService(event)">
+                <div class="form-group">
+                    <label>Category <span class="required">*</span></label>
+                    <select id="newServiceCategory" onchange="handleCategoryChange()">
+                        <option value="">Select category...</option>
+                        <option value="Carwash">🧼 Carwash</option>
+                        <option value="Wax">✨ Wax</option>
+                        <option value="Detailing">🔧 Detailing</option>
+                        <option value="Other">💰 Other</option>
+                    </select>
+                    <input type="text" id="newServiceCategoryCustom" placeholder="Or type new category" style="margin-top:0.4rem;display:none;">
+                </div>
+                <div class="form-group">
+                    <label>Service Name <span class="required">*</span></label>
+                    <input type="text" id="newServiceName" placeholder="e.g. Premium Wash">
+                </div>
+                <div class="form-group">
+                    <label>Size <span class="required">*</span></label>
+                    <select id="newServiceSize">
+                        <option value="">Select size...</option>
+                        <option value="Small">Small</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Large">Large</option>
+                        <option value="XLarge">XLarge</option>
+                        <option value="XXLarge">XXLarge</option>
+                        <option value="One Size">One Size</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Price (₱) <span class="required">*</span></label>
+                    <input type="number" id="newServicePrice" step="1" min="0" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <div class="checkbox-row">
+                        <input type="checkbox" id="addMultipleSizes">
+                        <label for="addMultipleSizes">Add this service for all sizes</label>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeAddServiceModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Service</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- PARTIAL PAYMENT MODAL -->
+    <div class="modal-overlay" id="partialPaymentModal">
+        <div class="modal" style="max-width: 480px;">
+            <div class="modal-header">
+                <h2 id="partialTitle">💰 Partial Payment</h2>
+                <button class="modal-close" onclick="closePartialPaymentModal()">&times;</button>
+            </div>
+            <input type="hidden" id="partialTotalValue" value="0">
+            <div class="partial-summary">
+                <div class="partial-summary-row">
+                    <span>Total Amount:</span>
+                    <strong id="partialTotalDisplay">₱0.00</strong>
+                </div>
+                <div class="partial-summary-row">
+                    <span>Current Status:</span>
+                    <span class="badge" id="partialFromStatus">UNPAID</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Amount Paid <span class="required">*</span></label>
+                <input type="number" id="partialAmountPaid" step="0.01" min="0" placeholder="0.00" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label>Balance Due</label>
+                <div id="partialBalanceDisplay" class="partial-balance">₱0.00</div>
+            </div>
+            <div class="form-group">
+                <label>Note / Reason <span class="required">*</span></label>
+                <textarea id="partialNote" rows="2" placeholder="e.g. Customer paid half now, balance on pickup" style="width:100%;padding:0.5rem;border:2px solid var(--gray-200);border-radius:8px;font-family:inherit;font-size:0.9rem;resize:vertical;"></textarea>
+            </div>
+            <div id="partialError" class="error" style="text-align:left;"></div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="closePartialPaymentModal()">Cancel</button>
+                <button type="button" class="btn btn-warning" onclick="confirmPartialPayment()">
+                    <i class="fas fa-check"></i> Confirm Partial
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARWASHER JOBS MODAL -->
+    <div class="modal-overlay" id="carwasherJobsModal">
+        <div class="modal" style="max-width: 900px; width: 95vw;">
+            <div class="modal-header">
+                <h2>👤 <span id="jobsCarwasherName">—</span> — Job List</h2>
+                <button class="modal-close" onclick="closeCarwasherJobsModal()">&times;</button>
+            </div>
+            <div class="jobs-summary">
+                <div class="jobs-stat">
+                    <span class="jobs-stat-label">Period</span>
+                    <span class="jobs-stat-value" id="jobsDateRange" style="font-size:0.78rem;">—</span>
+                </div>
+                <div class="jobs-stat">
+                    <span class="jobs-stat-label">Jobs Completed</span>
+                    <span class="jobs-stat-value" id="jobsCount">0</span>
+                </div>
+                <div class="jobs-stat">
+                    <span class="jobs-stat-label">Total Earnings</span>
+                    <span class="jobs-stat-value" id="jobsTotal" style="color:var(--success);">₱0</span>
+                </div>
+            </div>
+            <div class="table-wrap" style="max-height:60vh;">
+                <table id="jobsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Car</th>
+                            <th>Plate</th>
+                            <th>Services</th>
+                            <th>Duration</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="jobsBody"></tbody>
+                </table>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="closeCarwasherJobsModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCT MODAL (Kiosk Add/Edit) -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal" style="max-width: 480px;">
+            <div class="modal-header">
+                <h2 id="productModalTitle">➕ Add Product</h2>
+                <button class="modal-close" onclick="closeProductModal()">&times;</button>
+            </div>
+            <form id="productForm" onsubmit="saveProduct(event)">
+                <div class="product-form-preview">
+                    <div class="product-emoji-preview" id="productEmojiPreview">📦</div>
+                    <div class="product-emoji-input-wrap">
+                        <label>Emoji / Icon</label>
+                        <input type="text" id="productEmoji" placeholder="📦" maxlength="4" oninput="updateProductEmojiPreview()">
+                        <div class="product-emoji-hint">Paste any emoji or leave blank for 📦</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Product Name <span class="required">*</span></label>
+                    <input type="text" id="productName" placeholder="e.g. Car Shampoo" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Price (₱) <span class="required">*</span></label>
+                        <input type="number" id="productPrice" step="0.01" min="0" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Stock <span style="font-size:0.7rem;color:var(--gray-500);">(optional)</span></label>
+                        <input type="number" id="productStock" step="1" min="0" placeholder="∞">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Category <span class="required">*</span></label>
+                    <select id="productCategory" required>
+                        <option value="store">📦 Store Item</option>
+                        <option value="drinks">🥤 Drinks</option>
+                        <option value="paluto">🍜 Paluto</option>
+                        <option value="accessories">🧴 Accessories</option>
+                        <option value="other">💰 Other</option>
+                    </select>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeProductModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="productSubmitBtn">
+                        <i class="fas fa-save"></i> Save Product
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- RECEIPT MODAL -->
+    <div class="modal-overlay" id="receiptModal">
+        <div class="modal receipt-modal" style="max-width: 450px; padding: 1rem;">
+            <div class="modal-header">
+                <h2><i class="fas fa-receipt" style="color: var(--primary);"></i> Transaction Receipt</h2>
+                <button class="modal-close" onclick="closeReceiptModal()">&times;</button>
+            </div>
+            <div id="receiptContent"></div>
+            <div class="modal-actions receipt-actions">
+                <button type="button" class="btn btn-outline" onclick="closeReceiptModal()"><i class="fas fa-times"></i> Close</button>
+                <button type="button" class="btn btn-warning" onclick="printReceipt()"><i class="fas fa-print"></i> Print</button>
+                <button type="button" class="btn btn-danger" onclick="downloadReceiptPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIRMATION MODAL -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal confirm-modal">
+            <span class="confirm-icon" id="confirmIcon">⚠️</span>
+            <h3 class="confirm-title" id="confirmTitle">Confirm Action</h3>
+            <p class="confirm-message" id="confirmMessage">Are you sure you want to proceed?</p>
+            <div class="confirm-details" id="confirmDetails">
+                <div class="detail-row"><span class="detail-label">Transaction</span><span class="detail-value" id="confirmTransaction">—</span></div>
+                <div class="detail-row"><span class="detail-label">Amount</span><span class="detail-value" id="confirmAmount">—</span></div>
+                <div class="detail-row"><span class="detail-label">Status</span><span class="detail-value" id="confirmStatus">—</span></div>
+            </div>
+            <div class="confirm-actions">
+                <button class="btn btn-outline" onclick="closeConfirm()">Cancel</button>
+                <button class="btn btn-danger" id="confirmBtn" onclick="executeConfirm()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOUR OVERLAY -->
+    <div id="tourOverlay" class="tour-overlay" style="display:none;">
+        <div class="tour-tooltip" id="tourTooltip">
+            <div class="tour-header">
+                <span class="tour-step" id="tourStep">Step 1 of 6</span>
+                <button class="tour-close" onclick="endTour()">&times;</button>
+            </div>
+            <h4 class="tour-title" id="tourTitle">Welcome!</h4>
+            <p class="tour-text" id="tourText"></p>
+            <div class="tour-actions">
+                <button class="btn btn-outline btn-sm" onclick="endTour()">Skip</button>
+                <div style="display:flex;gap:0.5rem;">
+                    <button class="btn btn-outline btn-sm" id="tourPrevBtn" onclick="prevTourStep()" disabled>← Prev</button>
+                    <button class="btn btn-primary btn-sm" onclick="nextTourStep()">Next →</button>
+                </div>
+            </div>
+            <div class="tour-progress"><div class="tour-progress-bar" id="tourProgressBar"></div></div>
+        </div>
+    </div>
+
+    <div id="notificationContainer"></div>
+
+    <!-- FLOATING NEW TRANSACTION -->
+    <button class="fab-new-tx" id="fabMain" onclick="openAddModal()" aria-label="New Transaction" title="New Transaction">
+        <i class="fas fa-plus"></i>
+        <span class="fab-new-tx-label">New</span>
+    </button>
+
+    <script src="users.js"></script>
+    <script src="app.js"></script>
+</body>
 </html>
